@@ -4,7 +4,7 @@ import random
 import asyncio
 from flask import Flask, request
 import os
-from dotenv import load_dotenv  # Добавляем для работы с .env
+from dotenv import load_dotenv  # Для работы с .env
 
 # Загружаем переменные из .env
 load_dotenv()
@@ -279,14 +279,19 @@ bot = Bot(BOT_TOKEN)
 application = Application.builder().token(BOT_TOKEN).updater(None).build()
 application.bot = bot
 
-# Установка вебхука при старте через Flask
-@app.before_first_request
-async def setup_webhook():
-    try:
-        await bot.set_webhook(url=WEBHOOK_URL)
-        print(f"Webhook successfully set to: {WEBHOOK_URL}")
-    except Exception as e:
-        print(f"Failed to set webhook: {e}")
+# Флаг для первого запроса
+first_request = True
+
+@app.before_request
+async def setup_webhook_on_first_request():
+    global first_request
+    if first_request:
+        try:
+            await bot.set_webhook(url=WEBHOOK_URL)
+            print(f"Webhook successfully set to: {WEBHOOK_URL}")
+        except Exception as e:
+            print(f"Failed to set webhook: {e}")
+        first_request = False
 
 # Добавление обработчиков
 application.add_handler(CommandHandler("game", start_game))
