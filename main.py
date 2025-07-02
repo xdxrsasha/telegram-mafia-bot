@@ -7,7 +7,7 @@ import os
 
 app = Flask(__name__)
 BOT_TOKEN = os.getenv("BOT_TOKEN", "8042974218:AAHxWLGSLxtUfBUYYVbINfzXcuwsA0qfd88")
-WEBHOOK_URL = f"https://telegram-mafia-bot-16.onrender.com/{BOT_TOKEN}"
+WEBHOOK_URL = f"https://telegram-mafia-bot-17.onrender.com/{BOT_TOKEN}"
 
 game_states = {}
 
@@ -292,9 +292,9 @@ application.add_handler(CallbackQueryHandler(handle_night_action, pattern="^(kil
 application.add_handler(CallbackQueryHandler(handle_vote, pattern="^vote_"))
 
 @app.route(f'/{BOT_TOKEN}', methods=['POST'])
-def webhook():
+async def webhook():
     update = Update.de_json(request.get_json(), application)
-    application.process_update(update)
+    await application.process_update(update)  # Используем await для асинхронности
     return "OK"
 
 if __name__ == "__main__":
