@@ -8,8 +8,10 @@ import os
 app = Flask(__name__)
 BOT_TOKEN = os.getenv("BOT_TOKEN", "8042974218:AAFrxiU3uPBgWyDmpO9L1Obl0n_M8bhAbfI")
 
-# Инициализация Application один раз при старте
-application = Application.builder().token(BOT_TOKEN).build()
+# Инициализация Application с отключением Updater
+application = Application.builder().token(BOT_TOKEN).post_init(post_init=None).build()
+
+# Добавление обработчиков
 application.add_handler(CommandHandler("game", start_game))
 application.add_handler(CommandHandler("stop", stop_game))
 application.add_handler(CallbackQueryHandler(join_game, pattern="join_game"))
