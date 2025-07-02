@@ -8,8 +8,10 @@ import os
 app = Flask(__name__)
 BOT_TOKEN = os.getenv("BOT_TOKEN", "8042974218:AAFrxiU3uPBgWyDmpO9L1Obl0n_M8bhAbfI")
 
-# Инициализация Application с отключением Updater
-application = Application.builder().token(BOT_TOKEN).post_init(post_init=None).build()
+# Инициализация Application только для вебхука, без Updater
+application = Application.builder().token(BOT_TOKEN).build()
+application.updater = None  # Отключаем Updater
+application.job_queue = None  # Отключаем JobQueue, если не нужен
 
 # Добавление обработчиков
 application.add_handler(CommandHandler("game", start_game))
