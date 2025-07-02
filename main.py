@@ -294,7 +294,7 @@ application.add_handler(CallbackQueryHandler(handle_vote, pattern="^vote_"))
 @app.route(f'/{BOT_TOKEN}', methods=['POST'])
 async def webhook():
     update = Update.de_json(request.get_json(), application)
-    await application.process_update(update)  # Используем await для асинхронности
+    await application.process_update(update)  # Асинхронная обработка
     return "OK"
 
 if __name__ == "__main__":
