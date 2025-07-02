@@ -274,6 +274,14 @@ bot = Bot(BOT_TOKEN)
 application = Application.builder().token(BOT_TOKEN).updater(None).build()
 application.bot = bot
 
+# Установка вебхука при запуске
+async def set_webhook_on_start():
+    webhook_url = f"https://telegram-mafia-bot-16.onrender.com/{BOT_TOKEN}"
+    await bot.set_webhook(url=webhook_url)
+    print(f"Webhook set to: {webhook_url}")
+
+asyncio.run(set_webhook_on_start())
+
 # Добавление обработчиков
 application.add_handler(CommandHandler("game", start_game))
 application.add_handler(CommandHandler("stop", stop_game))
