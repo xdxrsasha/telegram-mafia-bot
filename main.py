@@ -6,7 +6,7 @@ from flask import Flask, request
 import os
 
 app = Flask(__name__)
-BOT_TOKEN = os.getenv("BOT_TOKEN", "8042974218:AAFrxiU3uPBgWyDmpO9L1Obl0n_M8bhAbfI")  # Установим токен по умолчанию на случай теста
+BOT_TOKEN = os.getenv("BOT_TOKEN", "8042974218:AAFrxiU3uPBgWyDmpO9L1Obl0n_M8bhAbfI")
 application = Application.builder().token(BOT_TOKEN).build()
 
 game_states = {}
@@ -282,5 +282,5 @@ if __name__ == "__main__":
     application.add_handler(CallbackQueryHandler(join_game, pattern="join_game"))
     application.add_handler(CallbackQueryHandler(handle_night_action, pattern="^(kill|heal|check|love)_"))
     application.add_handler(CallbackQueryHandler(handle_vote, pattern="^vote_"))
-    port = int(os.getenv("PORT", 8080))  # Используем PORT от Render
+    port = int(os.getenv("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
