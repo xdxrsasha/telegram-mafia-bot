@@ -2,7 +2,6 @@ from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
 import random
 import asyncio
-import time
 from flask import Flask, request
 import os
 
@@ -277,15 +276,11 @@ def webhook():
     return "OK"
 
 if __name__ == "__main__":
+    global application
     application = Application.builder().token(BOT_TOKEN).build()
     application.add_handler(CommandHandler("game", start_game))
     application.add_handler(CommandHandler("stop", stop_game))
     application.add_handler(CallbackQueryHandler(join_game, pattern="join_game"))
     application.add_handler(CallbackQueryHandler(handle_night_action, pattern="^(kill|heal|check|love)_"))
     application.add_handler(CallbackQueryHandler(handle_vote, pattern="^vote_"))
-    application.run_webhook(
-        listen="0.0.0.0",
-        port=int(os.getenv("APP_PORT", 8080)),
-        url_path=BOT_TOKEN,
-        webhook_url=f"https://your-bot.onrender.com/{BOT_TOKEN}"
-    )
+    app.run(host="0.0.0.0", port=int(os.getenv("APP_PORT", 8080)))
