@@ -4,10 +4,14 @@ import random
 import asyncio
 from flask import Flask, request
 import os
+from dotenv import load_dotenv  # Добавляем для работы с .env
+
+# Загружаем переменные из .env
+load_dotenv()
 
 app = Flask(__name__)
 BOT_TOKEN = os.getenv("BOT_TOKEN", "8042974218:AAHxWLGSLxtUfBUYYVbINfzXcuwsA0qfd88")
-WEBHOOK_URL = f"https://telegram-mafia-bot-17.onrender.com/{BOT_TOKEN}"  # Укажи правильный URL
+WEBHOOK_URL = f"https://telegram-mafia-bot-17.onrender.com/{BOT_TOKEN}"  # Правильный URL
 
 game_states = {}
 
@@ -275,14 +279,14 @@ bot = Bot(BOT_TOKEN)
 application = Application.builder().token(BOT_TOKEN).updater(None).build()
 application.bot = bot
 
-async def set_webhook_on_start():
+# Установка вебхука при старте через Flask
+@app.before_first_request
+async def setup_webhook():
     try:
         await bot.set_webhook(url=WEBHOOK_URL)
         print(f"Webhook successfully set to: {WEBHOOK_URL}")
     except Exception as e:
         print(f"Failed to set webhook: {e}")
-
-asyncio.run(set_webhook_on_start())
 
 # Добавление обработчиков
 application.add_handler(CommandHandler("game", start_game))
