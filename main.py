@@ -6,7 +6,8 @@ from flask import Flask, request
 import os
 
 app = Flask(__name__)
-BOT_TOKEN = os.getenv("BOT_TOKEN", "8042974218:AAFrxiU3uPBgWyDmpO9L1Obl0n_M8bhAbfI")
+BOT_TOKEN = os.getenv("BOT_TOKEN", "8042974218:AAHxWLGSLxtUfBUYYVbINfzXcuwsA0qfd88")
+WEBHOOK_URL = f"https://telegram-mafia-bot-16.onrender.com/{BOT_TOKEN}"
 
 game_states = {}
 
@@ -269,16 +270,17 @@ async def end_game(context: ContextTypes.DEFAULT_TYPE, chat_id):
     game_state["start_message_id"] = None
     game_state["lover_pairs"] = {}
 
-# Инициализация Application вручную без Updater
+# Инициализация и установка вебхука
 bot = Bot(BOT_TOKEN)
 application = Application.builder().token(BOT_TOKEN).updater(None).build()
 application.bot = bot
 
-# Установка вебхука при запуске
 async def set_webhook_on_start():
-    webhook_url = f"https://telegram-mafia-bot-16.onrender.com/{BOT_TOKEN}"
-    await bot.set_webhook(url=webhook_url)
-    print(f"Webhook set to: {webhook_url}")
+    try:
+        await bot.set_webhook(url=WEBHOOK_URL)
+        print(f"Webhook successfully set to: {WEBHOOK_URL}")
+    except Exception as e:
+        print(f"Failed to set webhook: {e}")
 
 asyncio.run(set_webhook_on_start())
 
