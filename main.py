@@ -7,7 +7,7 @@ import os
 
 app = Flask(__name__)
 BOT_TOKEN = os.getenv("BOT_TOKEN", "8042974218:AAHxWLGSLxtUfBUYYVbINfzXcuwsA0qfd88")
-WEBHOOK_URL = f"https://telegram-mafia-bot-17.onrender.com/{BOT_TOKEN}"
+WEBHOOK_URL = f"https://telegram-mafia-bot-17.onrender.com/{BOT_TOKEN}"  # Укажи правильный URL
 
 game_states = {}
 
