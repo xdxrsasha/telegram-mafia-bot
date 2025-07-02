@@ -7,6 +7,7 @@ import os
 
 app = Flask(__name__)
 BOT_TOKEN = os.getenv("BOT_TOKEN")
+application = Application.builder().token(BOT_TOKEN).build()
 
 game_states = {}
 
@@ -276,8 +277,6 @@ def webhook():
     return "OK"
 
 if __name__ == "__main__":
-    global application
-    application = Application.builder().token(BOT_TOKEN).build()
     application.add_handler(CommandHandler("game", start_game))
     application.add_handler(CommandHandler("stop", stop_game))
     application.add_handler(CallbackQueryHandler(join_game, pattern="join_game"))
