@@ -8,8 +8,13 @@ import os
 app = Flask(__name__)
 BOT_TOKEN = os.getenv("BOT_TOKEN", "8042974218:AAFrxiU3uPBgWyDmpO9L1Obl0n_M8bhAbfI")
 
-# Инициализация Application без вызова build() напрямую
-application = None
+# Инициализация Application один раз при старте
+application = Application.builder().token(BOT_TOKEN).build()
+application.add_handler(CommandHandler("game", start_game))
+application.add_handler(CommandHandler("stop", stop_game))
+application.add_handler(CallbackQueryHandler(join_game, pattern="join_game"))
+application.add_handler(CallbackQueryHandler(handle_night_action, pattern="^(kill|heal|check|love)_"))
+application.add_handler(CallbackQueryHandler(handle_vote, pattern="^vote_"))
 
 game_states = {}
 
@@ -274,14 +279,6 @@ async def end_game(context: ContextTypes.DEFAULT_TYPE, chat_id):
 
 @app.route(f'/{BOT_TOKEN}', methods=['POST'])
 def webhook():
-    global application
-    if application is None:
-        application = Application.builder().token(BOT_TOKEN).build()
-        application.add_handler(CommandHandler("game", start_game))
-        application.add_handler(CommandHandler("stop", stop_game))
-        application.add_handler(CallbackQueryHandler(join_game, pattern="join_game"))
-        application.add_handler(CallbackQueryHandler(handle_night_action, pattern="^(kill|heal|check|love)_"))
-        application.add_handler(CallbackQueryHandler(handle_vote, pattern="^vote_"))
     update = Update.de_json(request.get_json(), application)
     application.process_update(update)
     return "OK"
@@ -289,4 +286,3 @@ def webhook():
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
-
