@@ -277,6 +277,7 @@ async def end_game(context: ContextTypes.DEFAULT_TYPE, chat_id):
 # Инициализация и установка вебхука
 bot = Bot(BOT_TOKEN)
 application = Application.builder().token(BOT_TOKEN).updater(None).build()
+application.initialize()  # Инициализация Application
 application.bot = bot
 
 # Флаг для первого запроса
