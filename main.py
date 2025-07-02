@@ -311,4 +311,4 @@ if __name__ == "__main__":
     application.add_handler(CallbackQueryHandler(handle_night_action, pattern="^(kill|heal|check|love)_"))
     application.add_handler(CallbackQueryHandler(handle_vote, pattern="^vote_"))
     application.bot.set_webhook(url=f"https://your-bot.onrender.com/{BOT_TOKEN}")
-    app.run(host="0.0.0.0", port=int(os.getenv("PORT", 8080)))
+    app.run(host="0.0.0.0", port=int(os.getenv("APP_PORT", 8080)))
