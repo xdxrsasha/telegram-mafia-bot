@@ -1,6 +1,5 @@
-from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
+from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton, Bot
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
-from telegram.ext._utils.types import BD
 import random
 import asyncio
 from flask import Flask, request
@@ -10,12 +9,9 @@ app = Flask(__name__)
 BOT_TOKEN = os.getenv("BOT_TOKEN", "8042974218:AAFrxiU3uPBgWyDmpO9L1Obl0n_M8bhAbfI")
 
 # Инициализация Application вручную без Updater
-from telegram import Bot
 bot = Bot(BOT_TOKEN)
-application = Application.builder().token(BOT_TOKEN).build()
-application.bot = bot  # Переопределяем bot для совместимости
-application.updater = None  # Явно отключаем Updater
-application.job_queue = None  # Отключаем JobQueue
+application = Application.builder().token(BOT_TOKEN).updater(None).build()
+application.bot = bot
 
 # Добавление обработчиков
 application.add_handler(CommandHandler("game", start_game))
