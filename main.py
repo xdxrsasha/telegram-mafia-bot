@@ -8,18 +8,6 @@ import os
 app = Flask(__name__)
 BOT_TOKEN = os.getenv("BOT_TOKEN", "8042974218:AAFrxiU3uPBgWyDmpO9L1Obl0n_M8bhAbfI")
 
-# Инициализация Application вручную без Updater
-bot = Bot(BOT_TOKEN)
-application = Application.builder().token(BOT_TOKEN).updater(None).build()
-application.bot = bot
-
-# Добавление обработчиков
-application.add_handler(CommandHandler("game", start_game))
-application.add_handler(CommandHandler("stop", stop_game))
-application.add_handler(CallbackQueryHandler(join_game, pattern="join_game"))
-application.add_handler(CallbackQueryHandler(handle_night_action, pattern="^(kill|heal|check|love)_"))
-application.add_handler(CallbackQueryHandler(handle_vote, pattern="^vote_"))
-
 game_states = {}
 
 def get_game_state(chat_id):
@@ -280,6 +268,18 @@ async def end_game(context: ContextTypes.DEFAULT_TYPE, chat_id):
     game_state["players"] = {}
     game_state["start_message_id"] = None
     game_state["lover_pairs"] = {}
+
+# Инициализация Application вручную без Updater
+bot = Bot(BOT_TOKEN)
+application = Application.builder().token(BOT_TOKEN).updater(None).build()
+application.bot = bot
+
+# Добавление обработчиков
+application.add_handler(CommandHandler("game", start_game))
+application.add_handler(CommandHandler("stop", stop_game))
+application.add_handler(CallbackQueryHandler(join_game, pattern="join_game"))
+application.add_handler(CallbackQueryHandler(handle_night_action, pattern="^(kill|heal|check|love)_"))
+application.add_handler(CallbackQueryHandler(handle_vote, pattern="^vote_"))
 
 @app.route(f'/{BOT_TOKEN}', methods=['POST'])
 def webhook():
